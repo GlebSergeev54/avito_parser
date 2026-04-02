@@ -1,0 +1,16 @@
+# Основные
+playwright==1.58.0
+playwright-stealth==2.0.2
+openpyxl==3.1.5 #Excel 
+
+# Опционально (человеческое поведение)
+humanization-playwright==0.1.2
+
+# Для прокси
+requests
+
+# Для автоматической капчи
+playwright-captcha
+
+# Зависимости (устанавливаются автоматически, не нужно указывать)
+colorama, greenlet, loguru, patchright, pyee, typing_extensions, win32_setctime

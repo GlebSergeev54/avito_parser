@@ -1,0 +1,5 @@
+venv/
+*.xlsx
+avito_cache.db
+cookies.json
+__pycache__/
