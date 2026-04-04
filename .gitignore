@@ -1,5 +1,61 @@
+# Виртуальное окружение
 venv/
-*.xlsx
-avito_cache.db
-cookies.json
+.venv/
+env/
+.env/
+ENV/
+
+# Кэш Python
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Базы данных
+*.db
+*.sqlite
+*.sqlite3
+
+# Результаты парсинга (можно не удалять)
+# *.xlsx
+# *.xls
+# *.csv
+
+# Cookies и сессии
+cookies.json
+*.cookie
+
+# Логи
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Файлы с секретами
+.env
+.secrets
+config.local.py
+
+# Временные файлы
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Отчёты и покрытие
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Файлы тестов (если есть временные)
+.pytest_cache/
+.tox/

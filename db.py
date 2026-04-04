@@ -3,19 +3,17 @@ from sqlite3 import Connection
 
 from config import DB_PATH
 
-
 def get_connection() -> Connection:
     """
-    Создает и возвращает подключение к SQLite.
+    cоздает и возвращает подключение к SQLite
     """
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
-
 def create_tables(conn: Connection) -> None:
     """
-    Создает таблицу кеша, если ее еще нет.
+    cоздает таблицу кеша, если ее еще нет
     """
     conn.execute(
         """

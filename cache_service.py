@@ -1,14 +1,16 @@
+# управление кэшем объявлений в БД
+
 from sqlite3 import Connection
 
 from utils import now_iso, normalize_for_compare
 
-
+# Поля, по которым определяем, изменилось ли объявление, "критичные" поля
 COMPARE_FIELDS = ("status", "price", "title", "description")
 
 
 def get_existing_ad(conn: Connection, avito_id: str, query_text: str):
     """
-    Ищет существующую запись в кеше по составному ключу.
+    Ищет существующую запись в кеше по составному ключу (avito_id + query_text)
     """
     cursor = conn.execute(
         """
@@ -65,7 +67,7 @@ def insert_ad(conn: Connection, ad_data: dict) -> None:
 
 def update_ad(conn: Connection, ad_data: dict) -> None:
     """
-    Обновляет существующую запись.
+    Обновляет существующую запись
     """
     now = now_iso()
 
@@ -103,7 +105,8 @@ def update_ad(conn: Connection, ad_data: dict) -> None:
 
 def has_changes(existing_row, ad_data: dict) -> bool:
     """
-    Проверяет, изменились ли поля, указанные в ТЗ.
+    Проверяем, изменились ли поля, значения нормализуются, чтобы мелкие различия формата
+    не считались реальным изменением данных
     """
     for field in COMPARE_FIELDS:
         old_value = normalize_for_compare(existing_row[field])
@@ -115,7 +118,7 @@ def has_changes(existing_row, ad_data: dict) -> bool:
 
 def upsert_ad(conn: Connection, ad_data: dict) -> str:
     """
-    Логика кеша по ТЗ:
+    Основная функция кэширования
     - если запись новая и active -> insert
     - если запись новая и closed -> skip
     - если запись есть и изменились нужные поля -> update

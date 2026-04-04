@@ -12,15 +12,20 @@ logger = logging.getLogger(__name__)
 
 
 def _clean(value: str | None) -> str | None:
-    """Нормализует текст и превращает пустые строки в None."""
+    """Нормализует текст и превращает пустые строки в None, т к
+    NULL - отсутствие данных в ячейке БД
+    None - пустая строка
+    Чтобы не было ошибок
+    """
     if value is None:
         return None
     value = normalize_text(value)
     return value if value else None
 
-
 def _safe_inner_text(page: Page, selector: str, timeout: int = 2000) -> str | None:
-    """Безопасно получает visible text элемента."""
+    """
+    Безопасно получает visible text элемента (inner_text)
+    """
     try:
         locator = page.locator(selector).first
         if locator.count() == 0:
@@ -33,9 +38,10 @@ def _safe_inner_text(page: Page, selector: str, timeout: int = 2000) -> str | No
     except Exception:
         return None
 
-
 def _safe_text_content(page: Page, selector: str, timeout: int = 2000) -> str | None:
-    """Безопасно получает text_content элемента."""
+    """
+    безопасно получает text_content элемента
+    """
     try:
         locator = page.locator(selector).first
         if locator.count() == 0:
@@ -50,7 +56,7 @@ def _safe_text_content(page: Page, selector: str, timeout: int = 2000) -> str | 
 
 
 def _safe_attr(page: Page, selector: str, attr: str, timeout: int = 2000) -> str | None:
-    """Безопасно получает значение атрибута элемента."""
+    """Безопасно получает значение атрибута элемента"""
     try:
         locator = page.locator(selector).first
         if locator.count() == 0:
@@ -66,9 +72,9 @@ def _safe_attr(page: Page, selector: str, attr: str, timeout: int = 2000) -> str
 
 def get_first_text(page: Page, selectors: list[str], timeout: int = 2500) -> str | None:
     """
-    Пробует несколько селекторов подряд.
-    Сначала пытается взять inner_text, потом text_content.
-    Возвращает первый непустой текст.
+    Пробует несколько селекторов подряд
+    Сначала inner_text, потом text_content
+    Возвращает первый непустой текст, на случай изменения верстки авито
     """
     for selector in selectors:
         text = _safe_inner_text(page, selector, timeout=timeout)
@@ -84,9 +90,9 @@ def get_first_text(page: Page, selectors: list[str], timeout: int = 2500) -> str
 
 def _extract_price_value(price_text: str | None, meta_price: str | None) -> int | None:
     """
-    Возвращает числовую цену.
-    Приоритет: meta[itemprop='price'].
-    Если meta нет, пытается извлечь число из price_text.
+    Возвращает числовую цену
+    Приоритет: meta[itemprop='price'] - тег html,
+    иначе извлекаем число из price_text
     """
     if meta_price:
         try:
@@ -112,7 +118,7 @@ def _extract_price_value(price_text: str | None, meta_price: str | None) -> int 
 
 def is_closed_ad(page: Page) -> bool:
     """
-    Проверяет, закрыто ли объявление.
+    Проверяет, закрыто ли объявление
     """
     try:
         page_text = normalize_text(page.locator("body").inner_text())
@@ -140,9 +146,9 @@ def is_closed_ad(page: Page) -> bool:
 
 def parse_ad_page(page: Page, query_text: str, url: str) -> dict | None:
     """
-    Универсальный парсер карточки объявления Avito.
+    Универсальный парсер объявления Avito
 
-    Возвращает поля по ТЗ:
+    Возвращает поля:
     - avito_id
     - title
     - price

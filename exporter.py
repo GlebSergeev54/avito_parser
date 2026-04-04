@@ -9,7 +9,7 @@ from utils import now_iso, safe_filename
 
 def export_query_to_excel(conn: Connection, query_text: str) -> Path:
     """
-    Выгружает данные по query_text в Excel.
+    Выгружает данные в Excel.
     """
     cursor = conn.execute(
         """
@@ -72,7 +72,10 @@ def export_query_to_excel(conn: Connection, query_text: str) -> Path:
             ]
         )
 
+    # Добавляем timestamp в имя файла, чтобы выгрузки не перезаписывали друг друга
+    # Заменяем : -> -, чтобы имя файла было допустимым в win
     timestamp = now_iso().replace(":", "-")
+    # safe_filename делает имя файла безопасным для файловой системы
     filename = f"{safe_filename(query_text)}_{timestamp}.xlsx"
     output_path = BASE_DIR / filename
     workbook.save(output_path)
