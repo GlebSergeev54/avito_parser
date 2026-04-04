@@ -186,7 +186,7 @@ def test_is_blocked_page_no_false_positive():
     
     from scraper import PageWithHumanization
     
-    # Нормальные страницы, на которых НЕТ капчи
+    # странцы, на которых нет капчи
     normal_contents = [
         "<html><body><h1>Книги</h1><div data-marker='item'>Объявление 1</div></body></html>",
         "<html><body><div class='iva-item-content'>Обычная карточка</div></body></html>",
@@ -213,12 +213,12 @@ def test_is_blocked_page_no_false_positive():
         status = "БЛОКИРОВКА" if is_blocked else "нормально"
         print(f"   - {content[:40]}... -> {status}")
         
-        # нормальная страница НЕ должна определяться как капча
+        # не должна определяться как капча
         assert is_blocked is False, f"Ложное срабатывание! Страница определена как капча: {content[:50]}"
     
     print("\n   Проверка страниц с капчей (должны определяться):")
     
-    # Страницы, на которых ЕСТЬ капча
+    # Страницы, на которых есть капча
     captcha_contents = [
         "<html><body><iframe src='https://captcha.com'></iframe></body></html>",
         "<html><body><div class='captcha-container'>Подтвердите, что вы человек</div></body></html>",
@@ -241,7 +241,7 @@ def test_is_blocked_page_no_false_positive():
         status = "БЛОКИРОВКА" if is_blocked else "нормально"
         print(f"   - {content[:40]}... -> {status}")
         
-        # Страница с капчей ДОЛЖНА определяться
+        # Страница с капчей, должна определяться
         assert is_blocked is True, f"Капча не обнаружена: {content[:50]}"
     
     print("\n   Тест is_blocked_page пройден! Ложных срабатываний нет.")
@@ -459,7 +459,7 @@ if __name__ == "__main__":
     print("=" * 60)
     
     test_guard_page_state()
-    test_is_blocked_page_no_false_positive()  # <-- НОВЫЙ ТЕСТ НА ЛОЖНЫЕ СРАБАТЫВАНИЯ
+    test_is_blocked_page_no_false_positive()  
     test_collect_items_with_selectors()
     test_is_already_in_db()
     test_get_next_page_url()
